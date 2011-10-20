@@ -34,8 +34,6 @@ static inline void flush(void)
 		cpu_relax();
 }
 
-#define arch_decomp_wdog()
-
 static void putc(char ch)
 {
 	/*

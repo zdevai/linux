@@ -57,8 +57,4 @@ static inline void arch_decomp_setup(void)
 	uart[UART_LCR << shift] = 3;
 }
 
-static inline void arch_decomp_wdog(void)
-{
-}
-
 #endif
