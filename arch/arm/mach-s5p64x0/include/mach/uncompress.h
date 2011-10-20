@@ -151,6 +151,8 @@ static inline void arch_enable_uart_fifo(void)
 #define arch_enable_uart_fifo() do { } while(0)
 #endif
 
+#define ARCH_HAVE_DECOMP_SETUP
+
 static void arch_decomp_setup(void)
 {
 	/*

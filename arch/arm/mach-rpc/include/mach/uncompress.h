@@ -109,6 +109,8 @@ static inline void flush(void)
 {
 }
 
+#define ARCH_HAVE_DECOMP_SETUP
+
 /*
  * Setup for decompression
  */

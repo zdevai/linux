@@ -51,6 +51,7 @@ static __inline__ void __arch_decomp_setup(unsigned long arch_id)
 /*
  * arch_id is a variable in decompress_kernel()
  */
+#define ARCH_HAVE_DECOMP_SETUP
 #define arch_decomp_setup()	__arch_decomp_setup(arch_id)
 
 #endif

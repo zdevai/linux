@@ -125,6 +125,7 @@ static __inline__ void __arch_decomp_setup(unsigned long arch_id)
 	}
 }
 
+#define ARCH_HAVE_DECOMP_SETUP
 #define arch_decomp_setup()	__arch_decomp_setup(arch_id)
 
 #endif				/* __ASM_ARCH_MXC_UNCOMPRESS_H__ */

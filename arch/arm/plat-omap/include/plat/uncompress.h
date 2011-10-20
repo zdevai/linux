@@ -182,4 +182,5 @@ static inline void __arch_decomp_setup(unsigned long arch_id)
 	} while (0);
 }
 
+#define ARCH_HAVE_DECOMP_SETUP
 #define arch_decomp_setup()	__arch_decomp_setup(arch_id)

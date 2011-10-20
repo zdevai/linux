@@ -54,6 +54,8 @@ static inline void flush(void)
 {
 }
 
+#define ARCH_HAVE_DECOMP_SETUP
+
 static inline void arch_decomp_setup(void)
 {
 	/* initialize to default */

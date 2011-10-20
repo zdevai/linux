@@ -43,6 +43,8 @@ static inline void flush(void)
 {
 }
 
+#define ARCH_HAVE_DECOMP_SETUP
+
 static inline void arch_decomp_setup(void)
 {
 	volatile u8 *uart = (volatile u8 *)TEGRA_DEBUG_UART_BASE;

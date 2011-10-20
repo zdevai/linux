@@ -85,6 +85,7 @@ static void ethernet_reset(void)
 		;
 }
 
+#define ARCH_HAVE_DECOMP_SETUP
 
 static void arch_decomp_setup(void)
 {
