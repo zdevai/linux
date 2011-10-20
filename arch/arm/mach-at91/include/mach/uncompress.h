@@ -69,6 +69,4 @@ static inline void flush(void)
 #endif
 }
 
-#define arch_decomp_setup()
-
 #endif

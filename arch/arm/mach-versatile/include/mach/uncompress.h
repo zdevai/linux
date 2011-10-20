@@ -38,8 +38,3 @@ static inline void flush(void)
 	while (AMBA_UART_FR & (1 << 3))
 		barrier();
 }
-
-/*
- * nothing to do
- */
-#define arch_decomp_setup()

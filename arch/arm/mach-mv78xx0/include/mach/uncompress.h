@@ -39,8 +39,3 @@ static void flush(void)
 		barrier();
 	}
 }
-
-/*
- * nothing to do
- */
-#define arch_decomp_setup()

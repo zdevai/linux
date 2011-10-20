@@ -50,8 +50,3 @@ static inline void flush(void)
 	while (clps_readl(SYSFLGx) & SYSFLG_UBUSY)
 		barrier();
 }
-
-/*
- * nothing to do
- */
-#define arch_decomp_setup()

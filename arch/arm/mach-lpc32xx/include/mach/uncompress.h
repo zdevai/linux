@@ -53,7 +53,4 @@ static inline void flush(void)
 		UART_FIFO_CTL_TX_RESET, _UARTREG(LPC32XX_UART_IIRFCR_O));
 }
 
-/* NULL functions; we don't presently need them */
-#define arch_decomp_setup()
-
 #endif

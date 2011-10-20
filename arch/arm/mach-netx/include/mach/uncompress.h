@@ -68,8 +68,3 @@ static inline void flush(void)
 
 	while (REG(base + UART_FR) & FR_BUSY);
 }
-
-/*
- * nothing to do
- */
-#define arch_decomp_setup()

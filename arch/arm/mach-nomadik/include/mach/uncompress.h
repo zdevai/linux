@@ -54,8 +54,4 @@ static void flush(void)
 		barrier();
 }
 
-static inline void arch_decomp_setup(void)
-{
-}
-
 #endif /* __ASM_ARCH_UNCOMPRESS_H */

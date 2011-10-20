@@ -13,10 +13,6 @@
 #include <mach/hardware.h>
 #include <mach/uart.h>
 
-void arch_decomp_setup(void)
-{
-}
-
 static __inline__ void putc(char c)
 {
 	/*

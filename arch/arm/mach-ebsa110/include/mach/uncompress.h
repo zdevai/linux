@@ -37,8 +37,3 @@ static inline void flush(void)
 	} while ((v & (UART_LSR_TEMT|UART_LSR_THRE)) !=
 		 (UART_LSR_TEMT|UART_LSR_THRE));
 }
-
-/*
- * nothing to do
- */
-#define arch_decomp_setup()

@@ -41,8 +41,4 @@ static inline void flush(void)
 {
 }
 
-static void arch_decomp_setup(void)
-{
-}
-
 #endif/* __ASM_W90X900_UNCOMPRESS_H */

@@ -29,8 +29,3 @@ static void putc(const char c)
 static void flush(void)
 {
 }
-
-/*
- * nothing to do
- */
-#define arch_decomp_setup()

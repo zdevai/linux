@@ -38,5 +38,3 @@ static inline void flush(void)
 	while (BCMRING_UART_0_FR & (1 << 3))
 		;
 }
-
-#define arch_decomp_setup()

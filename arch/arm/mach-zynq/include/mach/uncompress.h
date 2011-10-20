@@ -20,10 +20,6 @@
 #include <mach/zynq_soc.h>
 #include <mach/uart.h>
 
-void arch_decomp_setup(void)
-{
-}
-
 static inline void flush(void)
 {
 	/*

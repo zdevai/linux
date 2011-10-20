@@ -43,8 +43,3 @@ static void putr()
 	putc('\r');
 }
 #endif
-
-/*
- * nothing to do
- */
-#define arch_decomp_setup()

@@ -15,8 +15,3 @@ static inline void putc(char c)
 static inline void flush(void)
 {
 }
-
-/*
- * nothing to do
- */
-#define arch_decomp_setup()

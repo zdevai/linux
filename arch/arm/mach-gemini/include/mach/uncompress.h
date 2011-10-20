@@ -34,9 +34,4 @@ static inline void flush(void)
 {
 }
 
-/*
- * nothing to do
- */
-#define arch_decomp_setup()
-
 #endif /* __MACH_UNCOMPRESS_H */

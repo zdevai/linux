@@ -32,8 +32,4 @@ static inline void flush(void)
 {
 }
 
-static inline void arch_decomp_setup(void)
-{
-}
-
 #endif
