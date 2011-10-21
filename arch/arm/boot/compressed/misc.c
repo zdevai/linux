@@ -16,16 +16,27 @@
  *  This allows for a much quicker boot time.
  */
 
-unsigned int __machine_arch_type;
-
 #include <linux/compiler.h>	/* for inline */
 #include <linux/types.h>
 #include <linux/linkage.h>
 
-static void putstr(const char *ptr);
-extern void error(char *x);
+void putstr(const char *ptr);
+void error(char *x);
+extern unsigned int __machine_arch_type;
+#define arch_id __machine_arch_type
 
 #include <mach/uncompress.h>
+
+#ifdef ARCH_HAVE_DECOMP_SETUP
+void inline decomp_setup(void)
+{
+	arch_decomp_setup();
+}
+#else /* ARCH_HAVE_DECOMP_SETUP */
+void inline decomp_setup(void)
+{
+}
+#endif /* ARCH_HAVE_DECOMP_SETUP */
 
 #ifdef CONFIG_DEBUG_ICEDCC
 
@@ -44,7 +55,6 @@ static void icedcc_putc(int ch)
 
 	asm("mcr p14, 0, %0, c0, c5, 0" : : "r" (ch));
 }
-
 
 #elif defined(CONFIG_CPU_XSCALE)
 
@@ -83,7 +93,7 @@ static void icedcc_putc(int ch)
 #define putc(ch)	icedcc_putc(ch)
 #endif
 
-static void putstr(const char *ptr)
+void putstr(const char *ptr)
 {
 	char c;
 
@@ -95,17 +105,6 @@ static void putstr(const char *ptr)
 
 	flush();
 }
-
-/*
- * gzip declarations
- */
-extern char input_data[];
-extern char input_data_end[];
-
-unsigned char *output_data;
-
-unsigned long free_mem_ptr;
-unsigned long free_mem_end_ptr;
 
 #ifndef arch_error
 #define arch_error(x)
@@ -120,37 +119,4 @@ void error(char *x)
 	putstr("\n\n -- System halted");
 
 	while(1);	/* Halt */
-}
-
-asmlinkage void __div0(void)
-{
-	error("Attempting division by 0!");
-}
-
-extern int do_decompress(u8 *input, int len, u8 *output, void (*error)(char *x));
-
-
-void
-decompress_kernel(unsigned long output_start, unsigned long free_mem_ptr_p,
-		unsigned long free_mem_ptr_end_p,
-		int arch_id)
-{
-	int ret;
-
-	output_data		= (unsigned char *)output_start;
-	free_mem_ptr		= free_mem_ptr_p;
-	free_mem_end_ptr	= free_mem_ptr_end_p;
-	__machine_arch_type	= arch_id;
-
-#ifdef ARCH_HAVE_DECOMP_SETUP
-	arch_decomp_setup();
-#endif /* ARCH_HAVE_DECOMP_SETUP */
-
-	putstr("Uncompressing Linux...");
-	ret = do_decompress(input_data, input_data_end - input_data,
-			    output_data, error);
-	if (ret)
-		error("decompressor returned an error");
-	else
-		putstr(" done, booting the kernel.\n");
 }
