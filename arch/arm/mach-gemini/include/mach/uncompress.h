@@ -15,8 +15,6 @@
 
 #include <mach/hardware.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	ucuart_init_8250(GEMINI_UART_BASE, 2, UCUART_IO_MEM32);

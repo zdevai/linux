@@ -10,8 +10,6 @@
 #include <asm/mach-types.h>
 #include <mach/cns3xxx.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	if (machine_is_cns3420vb())

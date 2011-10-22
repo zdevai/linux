@@ -21,7 +21,6 @@
 #ifndef __ASM_ARCH_UNCOMPRESS_H
 #define __ASM_ARCH_UNCOMPRESS_H
 
-#include <linux/io.h>
 #include <linux/atmel_serial.h>
 
 #if defined(CONFIG_AT91_EARLY_DBGU)
@@ -38,7 +37,8 @@
 #define UART_OFFSET AT91_USART4
 #elif defined(CONFIG_AT91_EARLY_USART5)
 #define UART_OFFSET AT91_USART5
-#endif
+#elif
+#define UART_OFFSET 0
 
 /*
  * The following code assumes the serial port has already been
@@ -47,9 +47,6 @@
  *
  * This does not append a newline
  */
-#ifdef UART_OFFSET
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	ucuart_init(UART_OFFSET, 0, UCUART_IO_MEM32, ATMEL_US_THR,
@@ -57,4 +54,4 @@ static inline void arch_decomp_setup(void)
 			ATMEL_US_CSR, ATMEL_US_TXEMPTY, ATMEL_US_TXEMPTY);
 }
 
-#endif /* UART_OFFSET */
+#endif

@@ -16,8 +16,6 @@
 #include "ixp4xx-regs.h"
 #include <asm/mach-types.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	/*

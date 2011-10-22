@@ -15,8 +15,6 @@
 #define DC21285_BASE ((volatile unsigned int *)0x42000160)
 #define SER0_BASE    ((volatile unsigned char *)0x7c0003f8)
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	if (machine_is_netwinder())

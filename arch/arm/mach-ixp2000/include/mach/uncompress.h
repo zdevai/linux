@@ -13,9 +13,6 @@
  *  option) any later version.
  *
  */
-
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	ucuart_init_8250(0xc0030000, 2, UCUART_IO_MEM32);

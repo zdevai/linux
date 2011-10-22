@@ -54,7 +54,7 @@ struct uncompress_uart ucuart;
 
 #include <mach/uncompress.h>
 
-#ifdef ARCH_HAVE_UCUART_GENERIC
+#ifndef ARCH_UCUART_NONGENERIC
 
 #include <linux/io.h>
 #include <linux/serial_reg.h>

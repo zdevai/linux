@@ -21,8 +21,6 @@
 
 #include <mach/hardware.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	ucuart_init_amba01x(NOMADIK_UART1_BASE);

@@ -26,8 +26,6 @@
 
 #include <mach/iomap.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	void __iomem *uart_base = (void*)TEGRA_DEBUG_UART_BASE;

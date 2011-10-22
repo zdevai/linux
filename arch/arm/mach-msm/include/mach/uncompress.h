@@ -19,8 +19,6 @@
 #include "linux/io.h"
 #include "mach/msm_iomap.h"
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 #if defined(MSM_DEBUG_UART_PHYS)

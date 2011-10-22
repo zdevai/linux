@@ -13,6 +13,7 @@
 #ifndef __ASM_ARCH_UNCOMPRESS_H
 #define __ASM_ARCH_UNCOMPRESS_H
 
+#define ARCH_UCUART_NONGENERIC
 #include <mach/map.h>
 #include <plat/uncompress.h>
 

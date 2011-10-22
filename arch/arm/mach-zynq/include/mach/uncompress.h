@@ -18,8 +18,6 @@
 #include <mach/zynq_soc.h>
 #include <mach/uart.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	ucuart_init(LL_UART_PADDR, 0, UCUART_IO_MEM32, UART_FIFO_OFFSET,

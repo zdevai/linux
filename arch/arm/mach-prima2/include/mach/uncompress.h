@@ -11,8 +11,6 @@
 
 #include <mach/uart.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	ucuart_init(SIRFSOC_UART1_PA_BASE, 0, UCUART_IO_MEM32,

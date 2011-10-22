@@ -1,6 +1,8 @@
 #ifndef __ASM_MACH_UNCOMPRESS_H
 #define __ASM_MACH_UNCOMPRESS_H
 
+#define ARCH_UCUART_NONGENERIC
+
 /*
  * This does not append a newline
  */

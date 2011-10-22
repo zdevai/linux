@@ -5,11 +5,7 @@
  * License version 2.  This program is licensed "as is" without any
  * warranty of any kind, whether express or implied.
  */
-
-#include <linux/serial_reg.h>
 #include <mach/mv78xx0.h>
-
-#define ARCH_HAVE_UCUART_GENERIC
 
 static inline void arch_decomp_setup(void)
 {

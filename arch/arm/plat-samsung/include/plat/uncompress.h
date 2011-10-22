@@ -14,6 +14,8 @@
 #ifndef __ASM_PLAT_UNCOMPRESS_H
 #define __ASM_PLAT_UNCOMPRESS_H
 
+#define ARCH_UCUART_NONGENERIC
+
 typedef unsigned int upf_t;	/* cannot include linux/serial_core.h */
 
 /* uart setup */

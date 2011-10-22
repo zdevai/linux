@@ -9,8 +9,6 @@
 
 #include <mach/hardware.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 /* debug-macro.S treats this port as an AMBA01x, but according to the
  * datasheet, this should be a 8250
  */

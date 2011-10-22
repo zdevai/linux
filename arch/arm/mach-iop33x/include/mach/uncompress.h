@@ -5,8 +5,6 @@
 #include <asm/mach-types.h>
 #include <mach/hardware.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	if (machine_is_iq80331() || machine_is_iq80332())

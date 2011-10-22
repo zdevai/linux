@@ -3,8 +3,6 @@
  */
 #include <mach/hardware.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	if (machine_is_iq80321())

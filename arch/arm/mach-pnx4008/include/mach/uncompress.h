@@ -20,7 +20,6 @@
  */
 
 #define UART5_BASE 0x40090000
-#define ARCH_HAVE_UCUART_GENERIC
 
 static inline void arch_decomp_setup(void)
 {

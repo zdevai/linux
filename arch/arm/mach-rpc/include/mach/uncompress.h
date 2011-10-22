@@ -7,8 +7,10 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
+#define ARCH_UCUART_NONGENERIC
+
 #define VIDMEM ((char *)SCREEN_START)
- 
+
 #include <linux/io.h>
 #include <mach/hardware.h>
 #include <asm/setup.h>

@@ -24,8 +24,6 @@
 
 #include <mach/serial.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void set_uart_info(u32 phys, void * __iomem virt)
 {
 	/*

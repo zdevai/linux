@@ -27,8 +27,6 @@
 #define UART1_BASE 0x100a00
 #define UART2_BASE 0x100a80
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	ucuart_init_amba01x(UART1_BASE);

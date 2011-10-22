@@ -16,8 +16,6 @@
 
 #include <mach/regs-uart.h>
 
-#define ARCH_HAVE_UCUART_GENERIC
-
 static inline void arch_decomp_setup(void)
 {
 	ucuart_init(KS8695_UART_PA, 0, UCUART_MEM32, KS8695_URTH,
