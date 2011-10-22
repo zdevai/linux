@@ -1,14 +1,8 @@
 /*
- * arch/arm/mach-prima2/include/mach/uncompress.h
- *
- * Copyright (c) 2011 Cambridge Silicon Radio Limited, a CSR plc group company.
- *
- * Licensed under GPLv2 or later.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
  */
-
-#ifndef __ASM_ARCH_UNCOMPRESS_H
-#define __ASM_ARCH_UNCOMPRESS_H
-
 #include <mach/uart.h>
 
 static inline void arch_decomp_setup(void)
@@ -17,4 +11,3 @@ static inline void arch_decomp_setup(void)
 			SIRFSOC_UART_TXFIFO_DATA, SIRFSOC_UART_TXFIFO_STATUS,
 			SIRFSOC_UART1_TXFIFO_FULL, 0, 0, 0, 0);
 }
-#endif

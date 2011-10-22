@@ -1,18 +1,8 @@
 /*
- * arch/arm/mach-ixp4xx/include/mach/uncompress.h 
- *
- * Copyright (C) 2002 Intel Corporation.
- * Copyright (C) 2003-2004 MontaVista Software, Inc.
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
- *
  */
-
-#ifndef _ARCH_UNCOMPRESS_H_
-#define _ARCH_UNCOMPRESS_H_
-
 #include "ixp4xx-regs.h"
 #include <asm/mach-types.h>
 
@@ -28,5 +18,3 @@ static inline void arch_decomp_setup(void)
 	else
 		ucuart_init_8250(IXP4XX_UART1_BASE_PHYS, 2, UCUART_IO_MEM32);
 }
-
-#endif

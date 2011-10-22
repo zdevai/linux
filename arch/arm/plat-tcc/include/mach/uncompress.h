@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2009 Hans J. Koch <hjk@linutronix.de>
- *
- * This file is licensed under the terms of the GPL version 2.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
  */
 #include <mach/tcc8k-regs.h>
 

@@ -1,11 +1,8 @@
 /*
- * arch/arm/mach-sa1100/include/mach/uncompress.h
- *
- * (C) 1999 Nicolas Pitre <nico@fluxnic.net>
- *
- * Reorganised to be machine independent.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
  */
-
 #include "hardware.h"
 
 static inline int uart_enabled(int base)

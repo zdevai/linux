@@ -1,18 +1,8 @@
-/* linux/arch/arm/mach-exynos4/include/mach/uncompress.h
- *
- * Copyright (c) 2010-2011 Samsung Electronics Co., Ltd.
- *		http://www.samsung.com
- *
- * EXYNOS4 - uncompress code
- *
+/*
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
-*/
-
-#ifndef __ASM_ARCH_UNCOMPRESS_H
-#define __ASM_ARCH_UNCOMPRESS_H __FILE__
-
+ */
 #include <mach/map.h>
 #include <plat/uncompress.h>
 
@@ -27,4 +17,3 @@ static void arch_detect_cpu(void)
 	fifo_mask = S5PV210_UFSTAT_TXMASK;
 	fifo_max = 15 << S5PV210_UFSTAT_TXSHIFT;
 }
-#endif /* __ASM_ARCH_UNCOMPRESS_H */

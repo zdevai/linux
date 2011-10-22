@@ -1,12 +1,8 @@
 /*
- * arch/arm/mach-h720x/include/mach/uncompress.h
- *
- * Copyright (C) 2001-2002 Jungjun Kim
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
  */
-
-#ifndef __ASM_ARCH_UNCOMPRESS_H
-#define __ASM_ARCH_UNCOMPRESS_H
-
 #include <mach/hardware.h>
 
 /* debug-macro.S treats this port as an AMBA01x, but according to the
@@ -16,5 +12,3 @@ static inline void arch_decomp_setup(void)
 {
 	ucuart_init_8250(SERIAL0_BASE, 2, UCUART_IO_MEM8);
 }
-
-#endif

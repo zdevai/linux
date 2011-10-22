@@ -14,9 +14,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-#ifndef __ASM_ARCH_MXC_UNCOMPRESS_H__
-#define __ASM_ARCH_MXC_UNCOMPRESS_H__
-
 #define __MXC_BOOT_UNCOMPRESS
 
 #include <asm/mach-types.h>
@@ -111,5 +108,3 @@ static inline void arch_decomp_setup(void)
 	ucuart_init(uart_base, 0, UCUART_IO_MEM32, TXR,
 			USR2, USR2_TXFE, USR2_TXFE, 0, 0, 0);
 }
-
-#endif				/* __ASM_ARCH_MXC_UNCOMPRESS_H__ */
