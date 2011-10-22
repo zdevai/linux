@@ -12,8 +12,6 @@
 #define UART2_BASE	(APB_PHYS_BASE + 0x17000)
 #define UART3_BASE	(APB_PHYS_BASE + 0x18000)
 
-#define ARCH_HAVE_DECOMP_SETUP
-
 static inline void arch_decomp_setup(void)
 {
 	if (machine_is_avengers_lite())

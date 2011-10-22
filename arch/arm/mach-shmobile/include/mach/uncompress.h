@@ -12,4 +12,6 @@ static inline void flush(void)
 {
 }
 
+#define arch_decomp_setup()
+
 #endif /* __ASM_MACH_UNCOMPRESS_H */

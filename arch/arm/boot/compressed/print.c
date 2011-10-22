@@ -56,8 +56,6 @@ struct uncompress_uart ucuart;
 
 #ifdef ARCH_HAVE_UCUART_GENERIC
 
-#define ARCH_HAVE_DECOMP_SETUP
-
 #include <linux/io.h>
 #include <linux/serial_reg.h>
 #include <linux/amba/serial.h>
@@ -224,13 +222,7 @@ void error(char *x)
 	while(1);	/* Halt */
 }
 
-#ifdef ARCH_HAVE_DECOMP_SETUP
 void inline decomp_setup(void)
 {
 	arch_decomp_setup();
 }
-#else /* ARCH_HAVE_DECOMP_SETUP */
-void inline decomp_setup(void)
-{
-}
-#endif /* ARCH_HAVE_DECOMP_SETUP */

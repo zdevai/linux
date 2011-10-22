@@ -21,8 +21,6 @@
 #include <asm/mach-types.h>
 #include <mach/hardware.h>
 
-#define ARCH_HAVE_DECOMP_SETUP
-
 static inline void arch_decomp_setup(void)
 {
 	/* Check in run time if we run on an U8500 or U5500 */
