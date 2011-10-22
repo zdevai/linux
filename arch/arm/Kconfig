@@ -1866,6 +1866,15 @@ config ZBOOT_ROM_SH_MOBILE_SDHI
 
 endchoice
 
+config UCUART_DT
+	bool "Configure the decompress UART port from DT"
+	depends on OF
+	help
+	  With this option, the decompressor will use the UART port set up
+	  via the device tree.
+	  This configuration will override the hardcoded settings in any
+	  uncompress.h files.
+
 config ARM_APPENDED_DTB
 	bool "Use appended device tree blob to zImage (EXPERIMENTAL)"
 	depends on OF && !ZBOOT_ROM && EXPERIMENTAL

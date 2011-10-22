@@ -49,8 +49,53 @@ void ucuart_init(int base, int regshift, enum ucuart_iotypes iotype,
 		 int flush_val);
 
 void ucuart_init_8250(int base, int regshift, enum ucuart_iotypes iotype);
+void ucuart_init_amba01x(int base);
 
 struct uncompress_uart ucuart;
+
+#ifdef CONFIG_UCUART_DT
+#include <libfdt.h>
+
+/* Just a concept sketch... */
+void ucuart_init_dt(void *fdt)
+{
+	int ret, offset;
+	const void *prop;
+	const int *uart_base, *uart_regshift;
+	enum ucuart_iotypes iotype = UCUART_IO_MEM8;
+
+	ret = fdt_check_header(fdt);
+	if (ret < 0)
+		return;
+
+	offset = fdt_path_offset(fdt, "/chosen");
+	if (offset == -FDT_ERR_NOTFOUND)
+		return;
+
+	prop = fdt_getprop(fdt, offset, "linux,ucuart-8250", NULL);
+	if (!prop) {
+		putstr("non-8250 uart\n");
+		return;
+	}
+
+	prop = fdt_getprop(fdt, offset, "linux,ucuart-io-32", NULL);
+	if (prop)
+		iotype = UCUART_IO_MEM32;
+
+	uart_base = fdt_getprop(fdt, offset, "linux,ucuart-base", NULL);
+	uart_regshift = fdt_getprop(fdt, offset, "linux,ucuart-regshift", NULL);
+
+	prop = fdt_getprop(fdt, offset, "linux,ucuart-8250", NULL);
+	if (prop)
+		ucuart_init_8250(*uart_base, *uart_regshift, iotype);
+
+	prop = fdt_getprop(fdt, offset, "linux,ucuart-amba01x", NULL);
+	if (prop)
+		ucuart_init_amba01x(*uart_base);
+
+	fdt_pack(fdt);
+}
+#endif
 
 #include <mach/uncompress.h>
 

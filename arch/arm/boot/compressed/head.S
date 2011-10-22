@@ -443,6 +443,14 @@ not_relocated:	mov	r0, #0
 		cmp	r2, r3
 		blo	1b
 
+#ifdef CONFIG_UCUART_DT
+/* Set up the uncompress UART port from DT data */
+		stmfd	sp!, {r0-r3, ip, lr}
+		mov	r0, r6			@ ATAG / DT pointer
+		bl	ucuart_init_dt
+		ldmfd	sp!, {r0-r3, ip, lr}
+#endif /* CONFIG_UCUART_DT */
+
 /*
  * The C runtime environment should now be setup sufficiently.
  * Set up some pointers, and start decompressing.

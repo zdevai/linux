@@ -110,6 +110,13 @@ ifeq ($(CONFIG_ARM_ATAG_DTB_COMPAT),y)
 OBJS	+= $(libfdt_objs) atags_to_fdt.o
 endif
 
+$(addprefix $(obj)/,$(libfdt_objs) print.o): \
+	$(addprefix $(obj)/,$(libfdt_hdrs))
+
+ifeq ($(CONFIG_UCUART_DT),y)
+OBJS	+= $(libfdt_objs)
+endif
+
 targets       := vmlinux vmlinux.lds \
 		 piggy.$(suffix_y) piggy.$(suffix_y).o \
 		 lib1funcs.o lib1funcs.S font.o font.c head.o misc.o $(OBJS)
