@@ -1,36 +1,16 @@
 /*
  * arch/arm/mach-iop32x/include/mach/uncompress.h
  */
-
-#include <asm/types.h>
-#include <asm/mach-types.h>
-#include <linux/serial_reg.h>
 #include <mach/hardware.h>
 
-volatile u8 *uart_base;
+#define ARCH_HAVE_UCUART_GENERIC
 
-#define TX_DONE		(UART_LSR_TEMT | UART_LSR_THRE)
-
-static inline void putc(char c)
-{
-	while ((uart_base[UART_LSR] & TX_DONE) != TX_DONE)
-		barrier();
-	uart_base[UART_TX] = c;
-}
-
-static inline void flush(void)
-{
-}
-
-static __inline__ void __arch_decomp_setup(unsigned long arch_id)
+static inline void arch_decomp_setup(void)
 {
 	if (machine_is_iq80321())
-		uart_base = (volatile u8 *)IQ80321_UART;
+		ucuart_init_8250(IQ80321_UART, 0, UCUART_IO_MEM8);
 	else if (machine_is_iq31244() || machine_is_em7210())
-		uart_base = (volatile u8 *)IQ31244_UART;
+		ucuart_init_8250(IQ31244_UART, 0, UCUART_IO_MEM8);
 	else
-		uart_base = (volatile u8 *)0xfe800000;
+		ucuart_init_8250(0xfe800000, 0, UCUART_IO_MEM8);
 }
-
-#define ARCH_HAVE_DECOMP_SETUP
-#define arch_decomp_setup()	__arch_decomp_setup(arch_id)

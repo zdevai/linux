@@ -9,26 +9,14 @@
 #ifndef __ASM_ARCH_UNCOMPRESS_H
 #define __ASM_ARCH_UNCOMPRESS_H
 
-#include <linux/io.h>
-#include <mach/hardware.h>
 #include <mach/uart.h>
 
-static __inline__ void putc(char c)
+#define ARCH_HAVE_UCUART_GENERIC
+
+static inline void arch_decomp_setup(void)
 {
-	/*
-	 * during kernel decompression, all mappings are flat:
-	 *  virt_addr == phys_addr
-	 */
-	while (__raw_readl(SIRFSOC_UART1_PA_BASE + SIRFSOC_UART_TXFIFO_STATUS)
-		& SIRFSOC_UART1_TXFIFO_FULL)
-		barrier();
-
-	__raw_writel(c, SIRFSOC_UART1_PA_BASE + SIRFSOC_UART_TXFIFO_DATA);
+	ucuart_init(SIRFSOC_UART1_PA_BASE, 0, UCUART_IO_MEM32,
+			SIRFSOC_UART_TXFIFO_DATA, SIRFSOC_UART_TXFIFO_STATUS,
+			SIRFSOC_UART1_TXFIFO_FULL, 0, 0, 0, 0);
 }
-
-static inline void flush(void)
-{
-}
-
 #endif
-

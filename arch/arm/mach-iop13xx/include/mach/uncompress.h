@@ -1,17 +1,8 @@
-#include <asm/types.h>
-#include <linux/serial_reg.h>
 #include <mach/hardware.h>
 
-#define UART_BASE ((volatile u32 *)IOP13XX_UART1_PHYS)
-#define TX_DONE (UART_LSR_TEMT | UART_LSR_THRE)
+#define ARCH_HAVE_UCUART_GENERIC
 
-static inline void putc(char c)
+static inline void arch_decomp_setup(void)
 {
-	while ((UART_BASE[UART_LSR] & TX_DONE) != TX_DONE)
-		barrier();
-	UART_BASE[UART_TX] = c;
-}
-
-static inline void flush(void)
-{
+	ucuart_init_8250(IOP13XX_UART1_PHYS, 2, UCUART_IO_MEM32);
 }

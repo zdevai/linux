@@ -9,23 +9,14 @@
 
 #include <mach/hardware.h>
 
-#define LSR 	0x14
-#define TEMPTY 	0x40
+#define ARCH_HAVE_UCUART_GENERIC
 
-static inline void putc(int c)
+/* debug-macro.S treats this port as an AMBA01x, but according to the
+ * datasheet, this should be a 8250
+ */
+static inline void arch_decomp_setup(void)
 {
-	volatile unsigned char *p = (volatile unsigned char *)(IO_PHYS+0x20000);
-
-	/* wait until transmit buffer is empty */
-	while((p[LSR] & TEMPTY) == 0x0)
-		barrier();
-
-	/* write next character */
-	*p = c;
-}
-
-static inline void flush(void)
-{
+	ucuart_init_8250(SERIAL0_BASE, 2, UCUART_IO_MEM8);
 }
 
 #endif

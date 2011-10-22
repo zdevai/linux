@@ -13,25 +13,13 @@
 #ifndef __MACH_UNCOMPRESS_H
 #define __MACH_UNCOMPRESS_H
 
-#include <linux/serial_reg.h>
 #include <mach/hardware.h>
 
-static volatile unsigned long * const UART = (unsigned long *)GEMINI_UART_BASE;
+#define ARCH_HAVE_UCUART_GENERIC
 
-/*
- * The following code assumes the serial port has already been
- * initialized by the bootloader.  If you didn't setup a port in
- * your bootloader then nothing will appear (which might be desired).
- */
-static inline void putc(char c)
+static inline void arch_decomp_setup(void)
 {
-	while (!(UART[UART_LSR] & UART_LSR_THRE))
-		barrier();
-	UART[UART_TX] = c;
-}
-
-static inline void flush(void)
-{
+	ucuart_init_8250(GEMINI_UART_BASE, 2, UCUART_IO_MEM32);
 }
 
 #endif /* __MACH_UNCOMPRESS_H */

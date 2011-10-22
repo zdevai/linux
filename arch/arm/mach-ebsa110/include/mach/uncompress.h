@@ -7,33 +7,9 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
+#define ARCH_HAVE_UCUART_GENERIC
 
-#include <linux/serial_reg.h>
-
-#define SERIAL_BASE	((unsigned char *)0xf0000be0)
-
-/*
- * This does not append a newline
- */
-static inline void putc(int c)
+static inline void arch_decomp_setup(void)
 {
-	unsigned char v, *base = SERIAL_BASE;
-
-	do {
-		v = base[UART_LSR << 2];
-		barrier();
-	} while (!(v & UART_LSR_THRE));
-
-	base[UART_TX << 2] = c;
-}
-
-static inline void flush(void)
-{
-	unsigned char v, *base = SERIAL_BASE;
-
-	do {
-		v = base[UART_LSR << 2];
-		barrier();
-	} while ((v & (UART_LSR_TEMT|UART_LSR_THRE)) !=
-		 (UART_LSR_TEMT|UART_LSR_THRE));
+	ucuart_init_8250(0xf0000be0, 2, UCUART_IO_MEM8);
 }

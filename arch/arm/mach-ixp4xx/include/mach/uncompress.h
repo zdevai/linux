@@ -15,27 +15,10 @@
 
 #include "ixp4xx-regs.h"
 #include <asm/mach-types.h>
-#include <linux/serial_reg.h>
 
-#define TX_DONE (UART_LSR_TEMT|UART_LSR_THRE)
+#define ARCH_HAVE_UCUART_GENERIC
 
-volatile u32* uart_base;
-
-static inline void putc(int c)
-{
-	/* Check THRE and TEMT bits before we transmit the character.
-	 */
-	while ((uart_base[UART_LSR] & TX_DONE) != TX_DONE)
-		barrier();
-
-	*uart_base = c;
-}
-
-static void flush(void)
-{
-}
-
-static __inline__ void __arch_decomp_setup(unsigned long arch_id)
+static inline void arch_decomp_setup(void)
 {
 	/*
 	 * Some boards are using UART2 as console
@@ -43,15 +26,9 @@ static __inline__ void __arch_decomp_setup(unsigned long arch_id)
 	if (machine_is_adi_coyote() || machine_is_gtwx5715() ||
 	    machine_is_gateway7001() || machine_is_wg302v2() ||
 	    machine_is_devixp() || machine_is_miccpt() || machine_is_mic256())
-		uart_base = (volatile u32*) IXP4XX_UART2_BASE_PHYS;
+		ucuart_init_8250(IXP4XX_UART2_BASE_PHYS, 2, UCUART_IO_MEM32);
 	else
-		uart_base = (volatile u32*) IXP4XX_UART1_BASE_PHYS;
+		ucuart_init_8250(IXP4XX_UART1_BASE_PHYS, 2, UCUART_IO_MEM32);
 }
-
-/*
- * arch_id is a variable in decompress_kernel()
- */
-#define ARCH_HAVE_DECOMP_SETUP
-#define arch_decomp_setup()	__arch_decomp_setup(arch_id)
 
 #endif

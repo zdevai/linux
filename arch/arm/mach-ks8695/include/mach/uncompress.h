@@ -14,21 +14,15 @@
 #ifndef __ASM_ARCH_UNCOMPRESS_H
 #define __ASM_ARCH_UNCOMPRESS_H
 
-#include <linux/io.h>
 #include <mach/regs-uart.h>
 
-static void putc(char c)
-{
-	while (!(__raw_readl(KS8695_UART_PA + KS8695_URLS) & URLS_URTHRE))
-		barrier();
+#define ARCH_HAVE_UCUART_GENERIC
 
-	__raw_writel(c, KS8695_UART_PA + KS8695_URTH);
-}
-
-static inline void flush(void)
+static inline void arch_decomp_setup(void)
 {
-	while (!(__raw_readl(KS8695_UART_PA + KS8695_URLS) & URLS_URTE))
-		barrier();
+	ucuart_init(KS8695_UART_PA, 0, UCUART_MEM32, KS8695_URTH,
+			KS8695_URLS, URLS_URTHRE, URLS_URTHRE,
+			KS8695_URLS, URLS_URTE, URLS_URTE);
 }
 
 #endif

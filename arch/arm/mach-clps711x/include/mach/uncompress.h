@@ -17,15 +17,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <mach/io.h>
 #include <mach/hardware.h>
 #include <asm/hardware/clps7111.h>
-
-#undef CLPS7111_BASE
-#define CLPS7111_BASE CLPS7111_PHYS_BASE
-
-#define __raw_readl(p)		(*(unsigned long *)(p))
-#define __raw_writel(v,p)	(*(unsigned long *)(p) = (v))
 
 #ifdef CONFIG_DEBUG_CLPS711X_UART2
 #define SYSFLGx	SYSFLG2
@@ -35,18 +28,11 @@
 #define UARTDRx	UARTDR1
 #endif
 
-/*
- * This does not append a newline
- */
-static inline void putc(int c)
-{
-	while (clps_readl(SYSFLGx) & SYSFLG_UTXFF)
-		barrier();
-	clps_writel(c, UARTDRx);
-}
+#define ARCH_HAVE_UCUART_GENERIC
 
-static inline void flush(void)
+static inline void arch_decomp_setup(void)
 {
-	while (clps_readl(SYSFLGx) & SYSFLG_UBUSY)
-		barrier();
+	ucuart_init(CLPS7111_PHYS_BASE, 0, UCUART_IO_MEM32, UARTDRx,
+			SYSFLGx, SYSFLG_UTXOFF, 0,
+			SYSFLGx, SYSFLG_UBUSY, 0);
 }

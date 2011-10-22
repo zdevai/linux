@@ -18,27 +18,10 @@
 #ifndef __ASM_ARCH_UNCOMPRESS_H
 #define __ASM_ARCH_UNCOMPRESS_H
 
-/* Defines for UART registers */
-
-#include <mach/regs-serial.h>
 #include <mach/map.h>
-#include <linux/serial_reg.h>
 
-#define TX_DONE	(UART_LSR_TEMT | UART_LSR_THRE)
-static volatile u32 * const uart_base = (u32 *)UART0_PA;
-
-static void putc(int ch)
+static inline void arch_decomp_setup(void)
 {
-	/* Check THRE and TEMT bits before we transmit the character.
-	 */
-	while ((uart_base[UART_LSR] & TX_DONE) != TX_DONE)
-		barrier();
-
-	*uart_base = ch;
+	ucuart_init_8250(W90X900_PA_UART, 2, UCUART_IO_MEM32);
 }
-
-static inline void flush(void)
-{
-}
-
 #endif/* __ASM_W90X900_UNCOMPRESS_H */

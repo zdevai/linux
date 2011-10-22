@@ -16,19 +16,10 @@
  * version 2. This program is licensed "as is" without any warranty of any
  * kind, whether express or implied.
  */
-
-#include <linux/types.h>
-#include <linux/serial_reg.h>
-
-#include <asm/memory.h>
 #include <asm/mach-types.h>
-
 #include <plat/serial.h>
 
 #define MDR1_MODE_MASK			0x07
-
-volatile u8 *uart_base;
-int uart_shift;
 
 /*
  * Store the DEBUG_LL uart number into memory.
@@ -45,30 +36,12 @@ static void set_omap_uart_info(unsigned char port)
 	*uart_info = port;
 }
 
-static void putc(int c)
-{
-	if (!uart_base)
-		return;
-
-	/* Check for UART 16x mode */
-	if ((uart_base[UART_OMAP_MDR1 << uart_shift] & MDR1_MODE_MASK) != 0)
-		return;
-
-	while (!(uart_base[UART_LSR << uart_shift] & UART_LSR_THRE))
-		barrier();
-	uart_base[UART_TX << uart_shift] = c;
-}
-
-static inline void flush(void)
-{
-}
-
 /*
  * Macros to configure UART1 and debug UART
  */
 #define _DEBUG_LL_ENTRY(mach, dbg_uart, dbg_shft, dbg_id)		\
 	if (machine_is_##mach()) {					\
-		uart_base = (volatile u8 *)(dbg_uart);			\
+		uart_base = (dbg_uart);					\
 		uart_shift = (dbg_shft);				\
 		port = (dbg_id);					\
 		set_omap_uart_info(port);				\
@@ -103,8 +76,10 @@ static inline void flush(void)
 	_DEBUG_LL_ENTRY(mach, TI816X_UART##p##_BASE, OMAP_PORT_SHIFT,	\
 		TI816XUART##p)
 
-static inline void __arch_decomp_setup(unsigned long arch_id)
+static inline void arch_decomp_setup(void)
 {
+	int uart_base;
+	int uart_shift;
 	int port = 0;
 
 	/*
@@ -180,7 +155,11 @@ static inline void __arch_decomp_setup(unsigned long arch_id)
 		DEBUG_LL_TI816X(3, ti8168evm);
 
 	} while (0);
-}
 
-#define ARCH_HAVE_DECOMP_SETUP
-#define arch_decomp_setup()	__arch_decomp_setup(arch_id)
+	/* Check for UART 16x mode */
+	if (__raw_readl((void __iomem *)uart_base +
+			UART_OMAP_MDR1 << uart_shift) & MDR1_MODE_MASK)
+		return;
+
+	ucuart_init_8250(uart_base, uart_shift, UCUART_IO_MEM8);
+}

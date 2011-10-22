@@ -22,49 +22,15 @@
  * initialized by the bootloader.  We search for the first enabled
  * port in the most probable order.  If you didn't setup a port in
  * your bootloader then nothing will appear (which might be desired).
- *
- * This does not append a newline
  */
-
-#define REG(x) (*(volatile unsigned long *)(x))
 
 #define UART1_BASE 0x100a00
 #define UART2_BASE 0x100a80
 
-#define UART_DR 0x0
+#define ARCH_HAVE_UCUART_GENERIC
 
-#define UART_CR 0x14
-#define CR_UART_EN (1<<0)
-
-#define UART_FR 0x18
-#define FR_BUSY (1<<3)
-#define FR_TXFF (1<<5)
-
-static void putc(char c)
+static inline void arch_decomp_setup(void)
 {
-	unsigned long base;
-
-	if (REG(UART1_BASE + UART_CR) & CR_UART_EN)
-		base = UART1_BASE;
-	else if (REG(UART2_BASE + UART_CR) & CR_UART_EN)
-		base = UART2_BASE;
-	else
-		return;
-
-	while (REG(base + UART_FR) & FR_TXFF);
-	REG(base + UART_DR) = c;
-}
-
-static inline void flush(void)
-{
-	unsigned long base;
-
-	if (REG(UART1_BASE + UART_CR) & CR_UART_EN)
-		base = UART1_BASE;
-	else if (REG(UART2_BASE + UART_CR) & CR_UART_EN)
-		base = UART2_BASE;
-	else
-		return;
-
-	while (REG(base + UART_FR) & FR_BUSY);
+	ucuart_init_amba01x(UART1_BASE);
+	ucuart_init_amba01x(UART2_BASE);
 }

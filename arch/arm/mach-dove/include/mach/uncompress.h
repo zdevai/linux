@@ -8,24 +8,9 @@
 
 #include <mach/dove.h>
 
-#define UART_THR ((volatile unsigned char *)(DOVE_UART0_PHYS_BASE + 0x0))
-#define UART_LSR ((volatile unsigned char *)(DOVE_UART0_PHYS_BASE + 0x14))
+#define ARCH_HAVE_UCUART_GENERIC
 
-#define LSR_THRE	0x20
-
-static void putc(const char c)
+static inline void arch_decomp_setup(void)
 {
-	int i;
-
-	for (i = 0; i < 0x1000; i++) {
-		/* Transmit fifo not full? */
-		if (*UART_LSR & LSR_THRE)
-			break;
-	}
-
-	*UART_THR = c;
-}
-
-static void flush(void)
-{
+	ucuart_init_8250(DOVE_UART0_PHYS_BASE, 2, UCUART_IO_MEM8);
 }

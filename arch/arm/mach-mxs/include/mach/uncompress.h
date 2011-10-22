@@ -20,58 +20,22 @@
 
 #include <asm/mach-types.h>
 
-unsigned long mxs_duart_base;
-
-#define MXS_DUART(x)	(*(volatile unsigned long *)(mxs_duart_base + (x)))
-
-#define MXS_DUART_DR		0x00
-#define MXS_DUART_FR		0x18
-#define MXS_DUART_FR_TXFE	(1 << 7)
-#define MXS_DUART_CR		0x30
-#define MXS_DUART_CR_UARTEN	(1 << 0)
-
-/*
- * The following code assumes the serial port has already been
- * initialized by the bootloader. If it's not, the output is
- * simply discarded.
- */
-
-static void putc(int ch)
-{
-	if (!mxs_duart_base)
-		return;
-	if (!(MXS_DUART(MXS_DUART_CR) & MXS_DUART_CR_UARTEN))
-		return;
-
-	while (!(MXS_DUART(MXS_DUART_FR) & MXS_DUART_FR_TXFE))
-		barrier();
-
-	MXS_DUART(MXS_DUART_DR) = ch;
-}
-
-static inline void flush(void)
-{
-}
-
 #define MX23_DUART_BASE_ADDR	0x80070000
 #define MX28_DUART_BASE_ADDR	0x80074000
 
-static inline void __arch_decomp_setup(unsigned long arch_id)
+static inline void arch_decomp_setup(void)
 {
 	switch (arch_id) {
 	case MACH_TYPE_MX23EVK:
-		mxs_duart_base = MX23_DUART_BASE_ADDR;
+		ucuart_init_amba01x(MX23_DUART_BASE_ADDR);
 		break;
 	case MACH_TYPE_MX28EVK:
 	case MACH_TYPE_TX28:
-		mxs_duart_base = MX28_DUART_BASE_ADDR;
+		ucuart_init_amba01x(MX28_DUART_BASE_ADDR);
 		break;
 	default:
 		break;
 	}
 }
-
-#define ARCH_HAVE_DECOMP_SETUP
-#define arch_decomp_setup()	__arch_decomp_setup(arch_id)
 
 #endif /* __MACH_MXS_UNCOMPRESS_H__ */

@@ -47,26 +47,14 @@
  *
  * This does not append a newline
  */
-static void putc(int c)
-{
 #ifdef UART_OFFSET
-	void __iomem *sys = (void __iomem *) UART_OFFSET;	/* physical address */
+#define ARCH_HAVE_UCUART_GENERIC
 
-	while (!(__raw_readl(sys + ATMEL_US_CSR) & ATMEL_US_TXRDY))
-		barrier();
-	__raw_writel(c, sys + ATMEL_US_THR);
-#endif
+static inline void arch_decomp_setup(void)
+{
+	ucuart_init(UART_OFFSET, 0, UCUART_IO_MEM32, ATMEL_US_THR,
+			ATMEL_US_CSR, ATMEL_US_TXRDY, ATMEL_US_TXRDY,
+			ATMEL_US_CSR, ATMEL_US_TXEMPTY, ATMEL_US_TXEMPTY);
 }
 
-static inline void flush(void)
-{
-#ifdef UART_OFFSET
-	void __iomem *sys = (void __iomem *) UART_OFFSET;	/* physical address */
-
-	/* wait for transmission to complete */
-	while (!(__raw_readl(sys + ATMEL_US_CSR) & ATMEL_US_TXEMPTY))
-		barrier();
-#endif
-}
-
-#endif
+#endif /* UART_OFFSET */

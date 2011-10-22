@@ -18,35 +18,8 @@
 #ifndef __ASM_ARCH_UNCOMPRESS_H
 #define __ASM_ARCH_UNCOMPRESS_H
 
-#include <asm/setup.h>
 #include <asm/mach-types.h>
-#include <linux/io.h>
-#include <linux/amba/serial.h>
 #include <mach/hardware.h>
-
-u32 ux500_uart_base;
-
-static void putc(const char c)
-{
-	/* Do nothing if the UART is not enabled. */
-	if (!(__raw_readb(ux500_uart_base + UART011_CR) & 0x1))
-		return;
-
-	if (c == '\n')
-		putc('\r');
-
-	while (__raw_readb(ux500_uart_base + UART01x_FR) & (1 << 5))
-		barrier();
-	__raw_writeb(c, ux500_uart_base + UART01x_DR);
-}
-
-static void flush(void)
-{
-	if (!(__raw_readb(ux500_uart_base + UART011_CR) & 0x1))
-		return;
-	while (__raw_readb(ux500_uart_base + UART01x_FR) & (1 << 3))
-		barrier();
-}
 
 #define ARCH_HAVE_DECOMP_SETUP
 
@@ -54,9 +27,9 @@ static inline void arch_decomp_setup(void)
 {
 	/* Check in run time if we run on an U8500 or U5500 */
 	if (machine_is_u5500())
-		ux500_uart_base = U5500_UART0_BASE;
+		ucuart_init_amba01x(U5500_UART0_BASE);
 	else
-		ux500_uart_base = U8500_UART2_BASE;
+		ucuart_init_amba01x(U8500_UART2_BASE);
 }
 
 #endif /* __ASM_ARCH_UNCOMPRESS_H */

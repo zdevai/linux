@@ -21,10 +21,6 @@
 
 #include <asm/mach-types.h>
 
-unsigned long uart_base;
-
-#define UART(x) (*(volatile unsigned long *)(uart_base + (x)))
-
 #define USR2 0x98
 #define USR2_TXFE (1<<14)
 #define TXR  0x40
@@ -40,23 +36,6 @@ unsigned long uart_base;
  * This does not append a newline
  */
 
-static void putc(int ch)
-{
-	if (!uart_base)
-		return;
-	if (!(UART(UCR1) & UCR1_UARTEN))
-		return;
-
-	while (!(UART(USR2) & USR2_TXFE))
-		barrier();
-
-	UART(TXR) = ch;
-}
-
-static inline void flush(void)
-{
-}
-
 #define MX1_UART1_BASE_ADDR	0x00206000
 #define MX25_UART1_BASE_ADDR	0x43f90000
 #define MX2X_UART1_BASE_ADDR	0x1000a000
@@ -67,8 +46,10 @@ static inline void flush(void)
 #define MX50_UART1_BASE_ADDR	0x53fbc000
 #define MX53_UART1_BASE_ADDR	0x53fbc000
 
-static __inline__ void __arch_decomp_setup(unsigned long arch_id)
+static inline void arch_decomp_setup(void)
 {
+	int uart_base;
+
 	switch (arch_id) {
 	case MACH_TYPE_MX1ADS:
 	case MACH_TYPE_SCB9328:
@@ -123,9 +104,12 @@ static __inline__ void __arch_decomp_setup(unsigned long arch_id)
 	default:
 		break;
 	}
-}
 
-#define ARCH_HAVE_DECOMP_SETUP
-#define arch_decomp_setup()	__arch_decomp_setup(arch_id)
+	if (!__raw_readl((void __iomem *)uart_base + UCR1) & UCR1_UARTEN)
+		return;
+
+	ucuart_init(uart_base, 0, UCUART_IO_MEM32, TXR,
+			USR2, USR2_TXFE, USR2_TXFE, 0, 0, 0);
+}
 
 #endif				/* __ASM_ARCH_MXC_UNCOMPRESS_H__ */

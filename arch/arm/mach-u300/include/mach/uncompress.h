@@ -17,24 +17,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#define AMBA_UART_DR	(*(volatile unsigned char *)0xc0013000)
-#define AMBA_UART_LCRH	(*(volatile unsigned char *)0xc001302C)
-#define AMBA_UART_CR	(*(volatile unsigned char *)0xc0013030)
-#define AMBA_UART_FR	(*(volatile unsigned char *)0xc0013018)
+#define ARCH_HAVE_UCUART_GENERIC
 
-/*
- * This does not append a newline
- */
-static inline void putc(int c)
+static inline void arch_decomp_setup(void)
 {
-	while (AMBA_UART_FR & (1 << 5))
-		barrier();
-
-	AMBA_UART_DR = c;
-}
-
-static inline void flush(void)
-{
-	while (AMBA_UART_FR & (1 << 3))
-		barrier();
+	ucuart_init_amba01x(0xc0013000);
 }

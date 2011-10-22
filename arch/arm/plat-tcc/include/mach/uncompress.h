@@ -3,26 +3,11 @@
  *
  * This file is licensed under the terms of the GPL version 2.
  */
-
-#include <linux/serial_reg.h>
-#include <linux/types.h>
-
 #include <mach/tcc8k-regs.h>
 
-unsigned int system_rev;
+#define ARCH_HAVE_UCUART_GENERIC
 
-#define ID_MASK			0x7fff
-
-static void putc(int c)
+static inline void arch_decomp_setup(void)
 {
-	u32 *uart_lsr = (u32 *)(UART_BASE_PHYS + (UART_LSR << 2));
-	u32 *uart_tx = (u32 *)(UART_BASE_PHYS + (UART_TX << 2));
-
-	while (!(*uart_lsr & UART_LSR_THRE))
-		barrier();
-	*uart_tx = c;
-}
-
-static inline void flush(void)
-{
+	ucuart_init_8250(UART_BASE_PHYS, 2, UCUART_IO_MEM32);
 }

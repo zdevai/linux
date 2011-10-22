@@ -7,39 +7,9 @@
  * Copyright (C) 1996,1997,1998 Russell King
  */
 
-#define SERIAL_BASE ((volatile unsigned char *)0x400003f8)
+#define ARCH_HAVE_UCUART_GENERIC
 
-static inline void putc(int c)
+static inline void arch_decomp_setup(void)
 {
-	volatile int t;
-
-	SERIAL_BASE[0] = c;
-	t=0x10000;
-	while (t--);
+	ucuart_init_8250(0x400003f8, 0, UCUART_IO_MEM8);
 }
-
-static inline void flush(void)
-{
-}
-
-#ifdef DEBUG
-static void putn(unsigned long z)
-{
-	int i;
-	char x;
-
-	putc('0');
-	putc('x');
-	for (i=0;i<8;i++) {
-		x='0'+((z>>((7-i)*4))&0xf);
-		if (x>'9') x=x-'0'+'A'-10;
-		putc(x);
-	}
-}
-
-static void putr()
-{
-	putc('\n');
-	putc('\r');
-}
-#endif

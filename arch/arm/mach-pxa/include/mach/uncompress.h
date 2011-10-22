@@ -16,61 +16,24 @@
 #define BTUART_BASE	(0x40200000)
 #define STUART_BASE	(0x40700000)
 
-unsigned long uart_base;
-unsigned int uart_shift;
-unsigned int uart_is_pxa;
-
-static inline unsigned char uart_read(int offset)
-{
-	return *(volatile unsigned char *)(uart_base + (offset << uart_shift));
-}
-
-static inline void uart_write(unsigned char val, int offset)
-{
-	*(volatile unsigned char *)(uart_base + (offset << uart_shift)) = val;
-}
-
-static inline int uart_is_enabled(void)
-{
-	/* assume enabled by default for non-PXA uarts */
-	return uart_is_pxa ? uart_read(UART_IER) & UART_IER_UUE : 1;
-}
-
-static inline void putc(char c)
-{
-	if (!uart_is_enabled())
-		return;
-
-	while (!(uart_read(UART_LSR) & UART_LSR_THRE))
-		barrier();
-
-	uart_write(c, UART_TX);
-}
-
-/*
- * This does not append a newline
- */
-static inline void flush(void)
-{
-}
-
-#define ARCH_HAVE_DECOMP_SETUP
+#define ARCH_HAVE_UCUART_GENERIC
 
 static inline void arch_decomp_setup(void)
 {
-	/* initialize to default */
-	uart_base = FFUART_BASE;
-	uart_shift = 2;
-	uart_is_pxa = 1;
+	unsigned long uart_base;
 
-	if (machine_is_littleton() || machine_is_intelmote2()
-	    || machine_is_csb726() || machine_is_stargate2()
-	    || machine_is_cm_x300() || machine_is_balloon3())
-		uart_base = STUART_BASE;
+	if (machine_is_arcom_zeus())
+		ucuart_init_8250(0x10000000, 1, UCUART_IO_MEM8); /* nCS4 */
+	else if (machine_is_littleton() || machine_is_intelmote2()
+			|| machine_is_csb726() || machine_is_stargate2()
+			|| machine_is_cm_x300() || machine_is_balloon3())
+			uart_base = STUART_BASE;
+	else
+		uart_base = FFUART_BASE;
 
-	if (machine_is_arcom_zeus()) {
-		uart_base = 0x10000000;	/* nCS4 */
-		uart_shift = 1;
-		uart_is_pxa = 0;
-	}
+	/* Don't do anything if UART is not enabled */
+	if (!__raw_readl(uart_base + UART_IER) & UART_IER_UUE)
+		return;
+
+	ucuart_init_8250(uart_base, 2, UCUART_IO_MEM8);
 }

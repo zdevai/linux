@@ -14,31 +14,30 @@
  * port in the most probable order.  If you didn't setup a port in
  * your bootloader then nothing will appear (which might be desired).
  */
+#define ARCH_HAVE_UCUART_GENERIC
 
-#define UART(x)		(*(volatile unsigned long *)(serial_port + (x)))
-
-static void putc(int c)
+static inline int uart_enabled(int base)
 {
-	unsigned long serial_port;
+	if (__raw_readl((void __iomem *)(base + UTCR3)) & UTCR3_TXE)
+		return 1;
 
-	do {
-		serial_port = _Ser3UTCR0;
-		if (UART(UTCR3) & UTCR3_TXE) break;
-		serial_port = _Ser1UTCR0;
-		if (UART(UTCR3) & UTCR3_TXE) break;
-		serial_port = _Ser2UTCR0;
-		if (UART(UTCR3) & UTCR3_TXE) break;
-		return;
-	} while (0);
-
-	/* wait for space in the UART's transmitter */
-	while (!(UART(UTSR1) & UTSR1_TNF))
-		barrier();
-
-	/* send the character out. */
-	UART(UTDR) = c;
+	return 0;
 }
 
-static inline void flush(void)
+static inline void arch_decomp_setup(void)
 {
+	int uart_base;
+
+	if (uart_enabled(_Ser3UTCR0))
+		uart_base = _Ser3UTCR0;
+	else if (uart_enabled(_Ser1UTCR0))
+		uart_base = _Ser1UTCR0;
+	else if (uart_enabled(_Ser2UTCR0))
+		uart_base = _Ser2UTCR0;
+	else
+		return;
+
+	ucuart_init(uart_base, 0, UCUART_IO_MEM32, UTDR,
+			UTSR1, UTSR1_TNF, UTSR1_TNF,
+			0, 0, 0);
 }

@@ -26,37 +26,19 @@
 
 #include <mach/iomap.h>
 
-static void putc(int c)
-{
-	volatile u8 *uart = (volatile u8 *)TEGRA_DEBUG_UART_BASE;
-	int shift = 2;
-
-	if (uart == NULL)
-		return;
-
-	while (!(uart[UART_LSR << shift] & UART_LSR_THRE))
-		barrier();
-	uart[UART_TX << shift] = c;
-}
-
-static inline void flush(void)
-{
-}
-
-#define ARCH_HAVE_DECOMP_SETUP
+#define ARCH_HAVE_UCUART_GENERIC
 
 static inline void arch_decomp_setup(void)
 {
-	volatile u8 *uart = (volatile u8 *)TEGRA_DEBUG_UART_BASE;
-	int shift = 2;
+	void __iomem *uart_base = (void*)TEGRA_DEBUG_UART_BASE;
 
-	if (uart == NULL)
-		return;
+	__raw_writel(__raw_readl(uart_base + UART_LCR << 2) | UART_LCR_DLAB,
+			uart_base + UART_LCR << 2);
+	__raw_writel(0x75, uart_base + UART_DLL << 2);
+	__raw_writel(0, uart_base + UART_DLM << 2);
+	__raw_writel(3, uart_base + UART_LCR << 2);
 
-	uart[UART_LCR << shift] |= UART_LCR_DLAB;
-	uart[UART_DLL << shift] = 0x75;
-	uart[UART_DLM << shift] = 0x0;
-	uart[UART_LCR << shift] = 3;
+	ucuart_init_8250(TEGRA_DEBUG_UART_BASE, 2, UCUART_IO_MEM8);
 }
 
 #endif

@@ -19,27 +19,12 @@
  */
 
 #include <linux/types.h>
-#include <linux/serial_reg.h>
 
 #include <asm/mach-types.h>
 
 #include <mach/serial.h>
 
-u32 *uart;
-
-/* PORT_16C550A, in polled non-fifo mode */
-static void putc(char c)
-{
-	while (!(uart[UART_LSR] & UART_LSR_THRE))
-		barrier();
-	uart[UART_TX] = c;
-}
-
-static inline void flush(void)
-{
-	while (!(uart[UART_LSR] & UART_LSR_THRE))
-		barrier();
-}
+#define ARCH_HAVE_UCUART_GENERIC
 
 static inline void set_uart_info(u32 phys, void * __iomem virt)
 {
@@ -53,6 +38,8 @@ static inline void set_uart_info(u32 phys, void * __iomem virt)
 	uart = (u32 *)phys;
 	uart_info[0] = phys;
 	uart_info[1] = (u32)virt;
+
+	ucuart_init_8250(phys, 2, UCUART_IO_MEM32);
 }
 
 #define _DEBUG_LL_ENTRY(machine, phys, virt)			\
@@ -73,7 +60,7 @@ static inline void set_uart_info(u32 phys, void * __iomem virt)
 	_DEBUG_LL_ENTRY(machine, TNETV107X_UART##port##_BASE,	\
 			TNETV107X_UART##port##_VIRT)
 
-static inline void __arch_decomp_setup(unsigned long arch_id)
+static inline void arch_decomp_setup(void)
 {
 	/*
 	 * Initialize the port based on the machine ID from the bootloader.
@@ -101,6 +88,3 @@ static inline void __arch_decomp_setup(unsigned long arch_id)
 		DEBUG_LL_TNETV107X(tnetv107x,		1);
 	} while (0);
 }
-
-#define ARCH_HAVE_DECOMP_SETUP
-#define arch_decomp_setup()	__arch_decomp_setup(arch_id)

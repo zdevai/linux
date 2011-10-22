@@ -19,17 +19,14 @@
 #include "linux/io.h"
 #include "mach/msm_iomap.h"
 
-static void putc(int c)
+#define ARCH_HAVE_UCUART_GENERIC
+
+static inline void arch_decomp_setup(void)
 {
 #if defined(MSM_DEBUG_UART_PHYS)
-	unsigned base = MSM_DEBUG_UART_PHYS;
-	while (!(readl(base + 0x08) & 0x04)) ;
-	writel(c, base + 0x0c);
-#endif
+	ucuart_init(MSM_DEBUG_UART_PHYS, 2, UCUART_IO_MEM32, 0x0c,
+			0x08, 0x04, 0x04,
+			0, 0, 0);
+#endif /* MSM_DEBUG_UART_PHYS */
 }
-
-static inline void flush(void)
-{
-}
-
 #endif

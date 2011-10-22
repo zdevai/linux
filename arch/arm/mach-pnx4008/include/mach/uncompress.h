@@ -20,21 +20,9 @@
  */
 
 #define UART5_BASE 0x40090000
+#define ARCH_HAVE_UCUART_GENERIC
 
-#define UART5_DR    (*(volatile unsigned char *) (UART5_BASE))
-#define UART5_FR    (*(volatile unsigned char *) (UART5_BASE + 18))
-
-static __inline__ void putc(char c)
+static inline void arch_decomp_setup(void)
 {
-	while (UART5_FR & (1 << 5))
-		barrier();
-
-	UART5_DR = c;
-}
-
-/*
- * This does not append a newline
- */
-static inline void flush(void)
-{
+	ucuart_init_amba01x(UART5_BASE);
 }

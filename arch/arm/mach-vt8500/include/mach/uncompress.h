@@ -14,18 +14,9 @@
  * GNU General Public License for more details.
  *
  */
+#define ARCH_HAVE_UCUART_GENERIC
 
-#define UART0_PHYS 0xd8200000
-#include <asm/io.h>
-
-static void putc(const char c)
+static inline void arch_decomp_setup(void)
 {
-	while (readb(UART0_PHYS + 0x1c) & 0x2)
-		/* Tx busy, wait and poll */;
-
-	writeb(c, UART0_PHYS);
-}
-
-static void flush(void)
-{
+	ucuart_init(0xd8200000, 0, UCUART_IO_MEM8, 0, 0x1C, 0x2, 0, 0, 0, 0);
 }

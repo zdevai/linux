@@ -11,26 +11,6 @@
 
 #include <mach/ep93xx-regs.h>
 
-static unsigned char __raw_readb(unsigned int ptr)
-{
-	return *((volatile unsigned char *)ptr);
-}
-
-static unsigned int __raw_readl(unsigned int ptr)
-{
-	return *((volatile unsigned int *)ptr);
-}
-
-static void __raw_writeb(unsigned char value, unsigned int ptr)
-{
-	*((volatile unsigned char *)ptr) = value;
-}
-
-static void __raw_writel(unsigned int value, unsigned int ptr)
-{
-	*((volatile unsigned int *)ptr) = value;
-}
-
 #if defined(CONFIG_EP93XX_EARLY_UART1)
 #define UART_BASE		EP93XX_UART1_PHYS_BASE
 #elif defined(CONFIG_EP93XX_EARLY_UART2)
@@ -40,28 +20,6 @@ static void __raw_writel(unsigned int value, unsigned int ptr)
 #else
 #define UART_BASE		EP93XX_UART1_PHYS_BASE
 #endif
-
-#define PHYS_UART_DATA		(UART_BASE + 0x00)
-#define PHYS_UART_FLAG		(UART_BASE + 0x18)
-#define UART_FLAG_TXFF		0x20
-
-static inline void putc(int c)
-{
-	int i;
-
-	for (i = 0; i < 1000; i++) {
-		/* Transmit fifo not full?  */
-		if (!(__raw_readb(PHYS_UART_FLAG) & UART_FLAG_TXFF))
-			break;
-	}
-
-	__raw_writeb(c, PHYS_UART_DATA);
-}
-
-static inline void flush(void)
-{
-}
-
 
 /*
  * Some bootloaders don't turn off DMA from the ethernet MAC before
@@ -85,9 +43,11 @@ static void ethernet_reset(void)
 		;
 }
 
-#define ARCH_HAVE_DECOMP_SETUP
+#define ARCH_HAVE_UCUART_GENERIC
 
-static void arch_decomp_setup(void)
+static inline void arch_decomp_setup(void)
 {
 	ethernet_reset();
+
+	ucuart_init_amba01x(UART_BASE);
 }
